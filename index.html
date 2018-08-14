@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Video 详解</title>
+</head>
+<body>
+	<!-- 基础用法 play pause 属性 -->
+	<!-- <video src="./test.mp4" width="400" height="225" controls controlslist="nodownload nofullscreen"></video> -->
+	<!-- 贴图  -->
+	<!-- <video src="./test.mp4" width="400" height="225" controls poster="./logo.jpg"></video> -->
+	<!-- 自动播放 -->
+	<!-- <video src="./test.mp4" width="400" height="225" autoplay controls poster="./logo.jpg"></video> -->
+	<!-- 静音 -->
+	<!-- <video src="./test.mp4" width="400" height="225" muted controls poster="./logo.jpg"></video> -->
+	<!-- 循环播放 -->
+	<!-- <video src="./test.mp4" width="400" height="225" loop muted controls poster="./logo.jpg"></video> -->
+	<!-- 预加载 -->
+	<!-- <video src="./test.mp4" width="400" height="225" preload controls poster="./logo.jpg"></video> -->
+	<!-- 音量控制,直接属性赋值不起作用 volume="0.5",需要通过js来控制 -->
+	<!-- <video src="./test.mp4" id="_volume" width="400" height="225" controls controlslist="nodownload" poster="./logo.jpg"></video>
+	<script type="text/javascript">
+		var v=document.getElementById("_volume");
+		v.volume=0.5;
+	</script> -->
+	<!-- 播放时间的控制 -->
+	<!-- <video src="./test.mp4" id="_time" width="400" height="225" controls controlslist="nodownload" poster="./logo.jpg"></video>
+	<script type="text/javascript">
+		var v=document.getElementById("_time");
+		console.log(v.currentTime);
+		v.currentTime=60;//设置当前播放时间为60,单位秒
+	</script> -->
+	<!-- 播放地址切换 -->
+	<!-- <video src="./test.mp4" id="_src" width="400" height="225" controls controlslist="nodownload" poster="./logo.jpg"></video>
+	<script type="text/javascript">
+		var v=document.getElementById("_src");
+		console.log(v.src);
+		setTimeout(function() {//延迟2秒切换地址
+			v.src="./test-2.mp4";
+		}, 2000);
+	</script> -->
+	<!-- 备用地址切换:当一个网络播放地址出现问题,切换下一正常源播放 -->
+	<!-- <video id="_source" controls poster="./logo.jpg" width="400" height="225">
+		<source src="./test.mp4" type="video/mp4">//当第一个source播放不了,则播放下一个source
+		<source src="./test-2.mp4" type="video/mp4">
+	</video>
+	<script type="text/javascript">
+		var v=document.getElementById("_source");
+		setTimeout(function() {
+			console.log('src',v.src);//src获取不了source地址
+			console.log('src',v.currentSrc);//currentSrc获取当前正在播放的source
+			//另外,通过遍历source,currentSrc之前的地址都是不能正常播放的地址
+		}, 2000);
+	</script> -->
+
+
+	<!-- 事件 -->
+
+	<video src="./test.mp4" id="vs" width="400" height="225" controls controlslist="nodownload nofullscreen"></video>
+	<script type="text/javascript">
+		var v=document.getElementById("vs");
+		//初始video时,v.duration为NaN
+		console.log('v.duration',v.duration);
+		//loadstart第一个触发的事件
+		v.addEventListener('loadstart',function(e){
+			console.log('loadstart',v.duration);
+		})
+		// durationchange时长变化触发事件,加载视频会触发一次该事件,
+		//原因是:当视频建立初期v.duration值为NaN,加载了一个视频后,会引发一次该事件
+		//durationchange具体触发几次,和视频的类型获取方式也有关系.
+		v.addEventListener('durationchange',function(e){
+			console.log('durationchange',v.duration);
+		})
+
+		//loadedmetadata:注意,durationchange比loadedmetadata先触发
+		v.addEventListener('loadedmetadata',function(e){
+			console.log('loadedmetadata');
+		})
+		//loadeddata
+		v.addEventListener('loadeddata',function(e){
+			console.log('loadeddata');
+		})
+		//progress
+		v.addEventListener('progress',function(e){
+			console.log('progress');
+		})
+		//canplay 有帧可以播放了
+		v.addEventListener('canplay',function(e){
+			console.log('canplay');
+		})
+		//canplaythrough 可以流畅的播放了
+		v.addEventListener('canplaythrough',function(e){
+			console.log('canplaythrough');
+		})
+
+		// 控制播放,应该是在canplay或者canplaythrough事件时,才执行播放操作,不应该在获取了var v=document.getElementById("vs");就直接v.play;
+
+
+		//play 播放事件
+		v.addEventListener('play',function(e){
+			console.log('play');
+		})
+		//pause
+		v.addEventListener('pause',function(e){
+			console.log('pause');
+		})
+		//seeking   点进度条的某个位置,用户改变了播放的位置
+		v.addEventListener('seeking',function(e){
+			console.log('seeking');
+		})
+		//seeked 
+		v.addEventListener('seeked',function(e){
+			console.log('seeked');
+		})
+		//waiting  
+		v.addEventListener('waiting',function(e){
+			console.log('waiting');
+		})
+		//playing
+		v.addEventListener('playing',function(e){
+			console.log('playing');
+		})
+		//timeupdate 播放时间更新的事件
+		v.addEventListener('timeupdate',function(e){
+			console.log('timeupdate');
+		})
+		//ended 播放结束,例如播放结束植入广告
+		v.addEventListener('ended',function(e){
+			console.log('ended');
+		})
+		//error
+		v.addEventListener('error',function(e){
+			console.log('error',e);
+		})
+	</script>
+</body>
+</html>
